@@ -55,3 +55,31 @@ class TaskController extends Controller
     {
         return view('tasks.create-bulk');
     }
+
+
+
+     /**
+     * Enregistrer plusieurs tâches
+     */
+    public function storeBulk(Request $request)
+    {
+        $request->validate([
+            'tasks' => 'required|array|min:1|max:5',
+            'tasks.*.title' => 'required|string|max:255',
+            'tasks.*.description' => 'nullable|string',
+            'tasks.*.deadline' => 'nullable|date|after_or_equal:today',
+            'tasks.*.priority' => 'required|in:low,medium,high',
+            'tasks.*.status' => 'required|in:todo,in_progress,done',
+        ]);
+
+        $createdCount = 0;
+        foreach ($request->tasks as $taskData) {
+            if (!empty($taskData['title'])) {
+                auth()->user()->tasks()->create($taskData);
+                $createdCount++;
+            }
+        }
+
+        return redirect()->route('tasks.index')
+            ->with('success', $createdCount . ' tâche(s) créée(s) avec succès');
+    }
