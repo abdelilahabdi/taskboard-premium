@@ -45,3 +45,13 @@ class TaskController extends Controller
         return redirect()->route('tasks.index')
             ->with('success', 'Tâche créée avec succès');
     }
+
+
+    
+    /**
+     * Afficher le formulaire de création multiple
+     */
+    public function createBulk()
+    {
+        return view('tasks.create-bulk');
+    }
