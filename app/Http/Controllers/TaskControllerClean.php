@@ -259,3 +259,26 @@ class TaskController extends Controller
             $query->where('status', $request->status);
         }
     }
+
+
+
+     /**
+     * Appliquer le tri à la requête
+     */
+    private function applySorting($query, Request $request)
+    {
+        $sortBy = $request->get('sort', 'created_at');
+        $sortOrder = $request->get('order', 'desc');
+        
+        if ($sortBy === 'deadline') {
+            // Les tâches sans deadline à la fin
+            if ($sortOrder === 'asc') {
+                $query->orderByRaw('deadline IS NULL, deadline ASC');
+            } else {
+                $query->orderByRaw('deadline IS NULL, deadline DESC');
+            }
+        } else {
+            $query->orderBy($sortBy, $sortOrder);
+        }
+    }
+}
