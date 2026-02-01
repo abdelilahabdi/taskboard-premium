@@ -186,3 +186,17 @@ class TaskController extends Controller
         return redirect()->route('tasks.archived')
             ->with('success', 'Tâche restaurée avec succès');
     }
+
+
+
+    /**
+     * Supprimer définitivement une tâche
+     */
+    public function forceDelete($id)
+    {
+        $task = auth()->user()->tasks()->onlyTrashed()->findOrFail($id);
+        $task->forceDelete();
+        
+        return redirect()->route('tasks.archived')
+            ->with('success', 'Tâche supprimée définitivement');
+    }
