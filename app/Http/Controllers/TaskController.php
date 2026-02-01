@@ -26,7 +26,7 @@ class TaskController extends Controller
             $query->where('status', $request->status);
         }
         
-        // Tri par deadlin avec gestion dyal valeur null
+        // Tri par deadline avec gestion des valeurs nulles
         if ($request->sort === 'deadline') {
             $order = $request->get('order', 'asc');
             if ($order === 'asc') {
@@ -40,7 +40,7 @@ class TaskController extends Controller
         
         $tasks = $query->paginate(10);
         
-        return view('tasks.index', compact('tasks'));
+        return view('tasks.professional-index', compact('tasks'));
     }
 
     public function create()

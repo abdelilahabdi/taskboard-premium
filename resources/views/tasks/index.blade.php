@@ -1,114 +1,137 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Mes Tâches') }}
-            </h2>
-            <div class="flex gap-2">
-                <a href="{{ route('tasks.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <div>
+                <h2 class="font-bold text-2xl text-gray-900 leading-tight">
+                    📋 {{ __('Mes Tâches') }}
+                </h2>
+                <p class="text-sm text-gray-600 mt-1">Gérez vos tâches efficacement</p>
+            </div>
+            <div class="flex gap-3">
+                <a href="{{ route('tasks.create') }}" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-2.5 px-5 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
                     ➕ Nouvelle Tâche
                 </a>
-                <a href="{{ route('tasks.create.bulk') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                <a href="{{ route('tasks.create.bulk') }}" class="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-2.5 px-5 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
                     ➕ Plusieurs Tâches
                 </a>
-                <a href="{{ route('tasks.archived') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                <a href="{{ route('tasks.archived') }}" class="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-semibold py-2.5 px-5 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
                     🗂️ Archives
                 </a>
             </div>
         </div>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @if(session('success'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-                    {{ session('success') }}
+                <div class="bg-gradient-to-r from-green-50 to-green-100 border-l-4 border-green-400 text-green-800 px-6 py-4 rounded-r-lg mb-6 shadow-sm">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        {{ session('success') }}
+                    </div>
                 </div>
             @endif
 
             <!-- Filtres et recherche -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                <div class="p-6">
+            <div class="bg-white overflow-hidden shadow-lg sm:rounded-xl mb-8 border border-gray-100">
+                <div class="bg-gradient-to-r from-gray-50 to-white p-6">
                     <!-- Tabs de statut -->
-                    <div class="mb-4">
-                        <div class="flex flex-wrap gap-2">
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">📋 Filtrer par statut</h3>
+                        <div class="flex flex-wrap gap-3">
                             <a href="{{ route('tasks.index', array_merge(request()->except('status'), [])) }}" 
-                               class="px-4 py-2 rounded-lg text-sm font-medium transition-colors
-                                      {{ !request('status') ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
-                                Tous ({{ auth()->user()->tasks()->count() }})
+                               class="px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200 transform hover:scale-105
+                                      {{ !request('status') ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 shadow-sm' }}">
+                                📋 Tous ({{ auth()->user()->tasks()->count() }})
                             </a>
                             <a href="{{ route('tasks.index', array_merge(request()->except('status'), ['status' => 'todo'])) }}" 
-                               class="px-4 py-2 rounded-lg text-sm font-medium transition-colors
-                                      {{ request('status') === 'todo' ? 'bg-gray-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
-                                Todo ({{ auth()->user()->tasks()->where('status', 'todo')->count() }})
+                               class="px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200 transform hover:scale-105
+                                      {{ request('status') === 'todo' ? 'bg-gradient-to-r from-gray-500 to-gray-600 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 shadow-sm' }}">
+                                ⏳ Todo ({{ auth()->user()->tasks()->where('status', 'todo')->count() }})
                             </a>
                             <a href="{{ route('tasks.index', array_merge(request()->except('status'), ['status' => 'in_progress'])) }}" 
-                               class="px-4 py-2 rounded-lg text-sm font-medium transition-colors
-                                      {{ request('status') === 'in_progress' ? 'bg-yellow-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
-                                In Progress ({{ auth()->user()->tasks()->where('status', 'in_progress')->count() }})
+                               class="px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200 transform hover:scale-105
+                                      {{ request('status') === 'in_progress' ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 shadow-sm' }}">
+                                🔄 In Progress ({{ auth()->user()->tasks()->where('status', 'in_progress')->count() }})
                             </a>
                             <a href="{{ route('tasks.index', array_merge(request()->except('status'), ['status' => 'done'])) }}" 
-                               class="px-4 py-2 rounded-lg text-sm font-medium transition-colors
-                                      {{ request('status') === 'done' ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
-                                Done ({{ auth()->user()->tasks()->where('status', 'done')->count() }})
+                               class="px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200 transform hover:scale-105
+                                      {{ request('status') === 'done' ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 shadow-sm' }}">
+                                ✅ Done ({{ auth()->user()->tasks()->where('status', 'done')->count() }})
                             </a>
                         </div>
                     </div>
                     
                     <!-- Autres filtres -->
-                    <form method="GET" action="{{ route('tasks.index') }}" class="grid grid-cols-1 md:grid-cols-6 gap-4">
-                        <!-- Conserver le statut sélectionné -->
-                        @if(request('status'))
-                            <input type="hidden" name="status" value="{{ request('status') }}">
-                        @endif
-                        
-                        <div class="md:col-span-2">
-                            <input type="text" name="search" placeholder="Rechercher dans titre et description..." value="{{ request('search') }}" class="border rounded px-3 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        
-                        <select name="priority" class="border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">Toutes priorités</option>
-                            <option value="low" {{ request('priority') === 'low' ? 'selected' : '' }}>Basse</option>
-                            <option value="medium" {{ request('priority') === 'medium' ? 'selected' : '' }}>Moyenne</option>
-                            <option value="high" {{ request('priority') === 'high' ? 'selected' : '' }}>Haute</option>
-                        </select>
-                        
-                        <select name="sort" class="border rounded px-3 py-2">
-                            <option value="created_at" {{ request('sort') === 'created_at' ? 'selected' : '' }}>Date création</option>
-                            <option value="deadline" {{ request('sort') === 'deadline' ? 'selected' : '' }}>Date limite</option>
-                            <option value="priority" {{ request('sort') === 'priority' ? 'selected' : '' }}>Priorité</option>
-                        </select>
-                        
-                        <!-- Bouton toggle pour deadline -->
-                        @if(request('sort') === 'deadline')
-                            <div class="flex gap-1">
-                                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded flex-1">
-                                    Filtrer
-                                </button>
-                                <a href="{{ route('tasks.index', array_merge(request()->all(), ['sort' => 'deadline', 'order' => request('order') === 'asc' ? 'desc' : 'asc'])) }}" 
-                                   class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-3 rounded flex items-center justify-center" 
-                                   title="Inverser l'ordre de tri">
-                                    @if(request('order') === 'asc')
-                                        Asc 
-                                    @else
-                                        Desc
-                                    @endif
-                                </a>
+                    <div class="border-t border-gray-100 pt-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">🔍 Recherche et filtres avancés</h3>
+                        <form method="GET" action="{{ route('tasks.index') }}" class="grid grid-cols-1 md:grid-cols-6 gap-4">
+                            <!-- Conserver le statut sélectionné -->
+                            @if(request('status'))
+                                <input type="hidden" name="status" value="{{ request('status') }}">
+                            @endif
+                            
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">🔍 Rechercher</label>
+                                <input type="text" name="search" placeholder="Rechercher dans titre et description..." value="{{ request('search') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
                             </div>
-                        @else
-                            <div class="flex gap-2">
-                                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex-1">
-                                    Filtrer
-                                </button>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">🏆 Priorité</label>
+                                <select name="priority" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                    <option value="">Toutes priorités</option>
+                                    <option value="low" {{ request('priority') === 'low' ? 'selected' : '' }}>🟢 Basse</option>
+                                    <option value="medium" {{ request('priority') === 'medium' ? 'selected' : '' }}>🟡 Moyenne</option>
+                                    <option value="high" {{ request('priority') === 'high' ? 'selected' : '' }}>🔴 Haute</option>
+                                </select>
                             </div>
-                        @endif
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">📅 Trier par</label>
+                                <select name="sort" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                    <option value="created_at" {{ request('sort') === 'created_at' ? 'selected' : '' }}>Date création</option>
+                                    <option value="deadline" {{ request('sort') === 'deadline' ? 'selected' : '' }}>Date limite</option>
+                                    <option value="priority" {{ request('sort') === 'priority' ? 'selected' : '' }}>Priorité</option>
+                                </select>
+                            </div>
                         
-                        @if(request()->hasAny(['search', 'priority', 'sort']))
-                            <a href="{{ route('tasks.index', request('status') ? ['status' => request('status')] : []) }}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-center">
-                                Reset
-                            </a>
-                        @endif
-                    </form>
+                            <!-- Boutons d'action -->
+                            @if(request('sort') === 'deadline')
+                                <div class="flex gap-2">
+                                    <button type="submit" class="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                                        🔍 Filtrer
+                                    </button>
+                                    <a href="{{ route('tasks.index', array_merge(request()->all(), ['sort' => 'deadline', 'order' => request('order') === 'asc' ? 'desc' : 'asc'])) }}" 
+                                       class="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center" 
+                                       title="Inverser l'ordre de tri">
+                                        @if(request('order') === 'asc')
+                                            ⬆️
+                                        @else
+                                            ⬇️
+                                        @endif
+                                    </a>
+                                </div>
+                            @else
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">&nbsp;</label>
+                                    <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                                        🔍 Filtrer
+                                    </button>
+                                </div>
+                            @endif
+                            
+                            @if(request()->hasAny(['search', 'priority', 'sort']))
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">&nbsp;</label>
+                                    <a href="{{ route('tasks.index', request('status') ? ['status' => request('status')] : []) }}" class="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 text-center block">
+                                        ✖️ Reset
+                                    </a>
+                                </div>
+                            @endif
+                        </form>
+                    </div>
                 </div>
             </div>
 
