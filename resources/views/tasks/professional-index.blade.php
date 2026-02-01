@@ -260,8 +260,50 @@
                 @endforeach
                 
                 <!-- Pagination -->
-                <div class="mt-8">
-                    {{ $tasks->appends(request()->query())->links() }}
+                <div class="mt-8 flex justify-center">
+                    <nav class="bg-white rounded-lg shadow-sm border border-gray-200 p-2">
+                        <div class="flex items-center space-x-1">
+                            @if ($tasks->onFirstPage())
+                                <span class="px-3 py-2 text-gray-400 cursor-not-allowed">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                    </svg>
+                                </span>
+                            @else
+                                <a href="{{ $tasks->previousPageUrl() }}" class="px-3 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                    </svg>
+                                </a>
+                            @endif
+                            
+                            @foreach ($tasks->getUrlRange(1, $tasks->lastPage()) as $page => $url)
+                                @if ($page == $tasks->currentPage())
+                                    <span class="px-3 py-2 bg-blue-600 text-white rounded-lg font-medium">{{ $page }}</span>
+                                @else
+                                    <a href="{{ $url }}" class="px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">{{ $page }}</a>
+                                @endif
+                            @endforeach
+                            
+                            @if ($tasks->hasMorePages())
+                                <a href="{{ $tasks->nextPageUrl() }}" class="px-3 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </a>
+                            @else
+                                <span class="px-3 py-2 text-gray-400 cursor-not-allowed">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </span>
+                            @endif
+                        </div>
+                        
+                        <div class="text-center mt-2 text-sm text-gray-600">
+                            Affichage {{ $tasks->firstItem() ?? 0 }} - {{ $tasks->lastItem() ?? 0 }} sur {{ $tasks->total() }} tâches
+                        </div>
+                    </nav>
                 </div>
             @else
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center" id="emptyState" style="display: none;">
