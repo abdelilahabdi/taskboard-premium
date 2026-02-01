@@ -173,3 +173,16 @@ class TaskController extends Controller
         
         return view('tasks.archived', compact('archivedTasks'));
     }
+
+
+     /**
+     * Restaurer une tâche archivée
+     */
+    public function restore($id)
+    {
+        $task = auth()->user()->tasks()->onlyTrashed()->findOrFail($id);
+        $task->restore();
+        
+        return redirect()->route('tasks.archived')
+            ->with('success', 'Tâche restaurée avec succès');
+    }
