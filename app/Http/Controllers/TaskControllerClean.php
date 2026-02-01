@@ -31,3 +31,17 @@ class TaskController extends Controller
     {
         return view('tasks.create');
     }
+
+
+    /**
+     * Enregistrer une nouvelle tâche
+     */
+    public function store(Request $request)
+    {
+        $this->validateTask($request);
+        
+        auth()->user()->tasks()->create($request->all());
+        
+        return redirect()->route('tasks.index')
+            ->with('success', 'Tâche créée avec succès');
+    }
