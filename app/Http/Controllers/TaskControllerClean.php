@@ -104,3 +104,19 @@ class TaskController extends Controller
         $this->checkOwnership($task);
         return view('tasks.edit', compact('task'));
     }
+
+
+
+    /**
+     * Mettre à jour une tâche
+     */
+    public function update(Request $request, Task $task)
+    {
+        $this->checkOwnership($task);
+        $this->validateTask($request, false);
+        
+        $task->update($request->all());
+        
+        return redirect()->route('tasks.index')
+            ->with('success', 'Tâche mise à jour avec succès');
+    }
