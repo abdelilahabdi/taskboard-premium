@@ -135,3 +135,26 @@ class TaskController extends Controller
         return redirect()->route('tasks.index')
             ->with('success', 'Tâche archivée avec succès');
     }
+
+
+
+    /**
+     * Mettre à jour le statut d'une tâche
+     */
+    public function updateStatus(Request $request, Task $task)
+    {
+        $this->checkOwnership($task);
+        
+        $request->validate([
+            'status' => 'required|in:todo,in_progress,done'
+        ]);
+        
+        $task->update(['status' => $request->status]);
+        
+        if ($request->ajax()) {
+            return response()->json(['success' => true]);
+        }
+        
+        return redirect()->route('tasks.index')
+            ->with('success', 'Statut mis à jour avec succès');
+    }
