@@ -200,3 +200,14 @@ class TaskController extends Controller
         return redirect()->route('tasks.archived')
             ->with('success', 'Tâche supprimée définitivement');
     }
+
+
+      /**
+     * Vérifier la propriété d'une tâche
+     */
+    private function checkOwnership(Task $task)
+    {
+        if ($task->user_id !== auth()->id()) {
+            abort(403, 'Accès non autorisé à cette tâche');
+        }
+    }
