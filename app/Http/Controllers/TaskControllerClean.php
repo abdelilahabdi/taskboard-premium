@@ -211,3 +211,27 @@ class TaskController extends Controller
             abort(403, 'Accès non autorisé à cette tâche');
         }
     }
+
+
+
+     /**
+     * Valider les données d'une tâche
+     */
+    private function validateTask(Request $request, $requireFutureDate = true)
+    {
+        $rules = [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'priority' => 'required|in:low,medium,high',
+            'status' => 'required|in:todo,in_progress,done',
+        ];
+        
+        // Pour la création, exiger une date future
+        if ($requireFutureDate) {
+            $rules['deadline'] = 'nullable|date|after_or_equal:today';
+        } else {
+            $rules['deadline'] = 'nullable|date';
+        }
+        
+        $request->validate($rules);
+    }
