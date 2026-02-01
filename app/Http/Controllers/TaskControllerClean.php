@@ -120,3 +120,18 @@ class TaskController extends Controller
         return redirect()->route('tasks.index')
             ->with('success', 'Tâche mise à jour avec succès');
     }
+
+
+
+    /**
+     * Supprimer (archiver) une tâche
+     */
+    public function destroy(Task $task)
+    {
+        $this->checkOwnership($task);
+        
+        $task->delete();
+        
+        return redirect()->route('tasks.index')
+            ->with('success', 'Tâche archivée avec succès');
+    }
