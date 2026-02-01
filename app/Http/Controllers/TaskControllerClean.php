@@ -83,3 +83,14 @@ class TaskController extends Controller
         return redirect()->route('tasks.index')
             ->with('success', $createdCount . ' tâche(s) créée(s) avec succès');
     }
+
+
+
+     /**
+     * Afficher une tâche spécifique
+     */
+    public function show(Task $task)
+    {
+        $this->checkOwnership($task);
+        return view('tasks.show', compact('task'));
+    }
