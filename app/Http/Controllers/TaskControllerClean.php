@@ -158,3 +158,18 @@ class TaskController extends Controller
         return redirect()->route('tasks.index')
             ->with('success', 'Statut mis à jour avec succès');
     }
+
+
+
+     /**
+     * Afficher les tâches archivées
+     */
+    public function archived()
+    {
+        $archivedTasks = auth()->user()->tasks()
+            ->onlyTrashed()
+            ->orderBy('deleted_at', 'desc')
+            ->paginate(10);
+        
+        return view('tasks.archived', compact('archivedTasks'));
+    }
