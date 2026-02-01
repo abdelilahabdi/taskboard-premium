@@ -94,3 +94,13 @@ class TaskController extends Controller
         $this->checkOwnership($task);
         return view('tasks.show', compact('task'));
     }
+
+
+      /**
+     * Afficher le formulaire d'édition
+     */
+    public function edit(Task $task)
+    {
+        $this->checkOwnership($task);
+        return view('tasks.edit', compact('task'));
+    }
