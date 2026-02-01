@@ -23,3 +23,11 @@ class TaskController extends Controller
         
         return view('tasks.professional-index', compact('tasks'));
     }
+
+    /**
+     * Afficher le formulaire de création
+     */
+    public function create()
+    {
+        return view('tasks.create');
+    }
