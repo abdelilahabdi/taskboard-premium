@@ -235,3 +235,27 @@ class TaskController extends Controller
         
         $request->validate($rules);
     }
+
+
+
+    /**
+     * Appliquer les filtres à la requête
+     */
+    private function applyFilters($query, Request $request)
+    {
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('title', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('description', 'like', '%' . $searchTerm . '%');
+            });
+        }
+        
+        if ($request->filled('priority')) {
+            $query->where('priority', $request->priority);
+        }
+        
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+    }
